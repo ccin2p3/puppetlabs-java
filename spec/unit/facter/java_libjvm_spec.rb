@@ -1,0 +1,266 @@
+require "spec_helper"
+
+describe Facter::Util::Fact do
+  before {
+    Facter.clear
+    Facter.fact(:kernel).stubs(:value).returns('Linux')
+  }
+
+  describe "java_libjvm" do
+    context 'returns libjvm path' do
+      context 'on osfamily Debian' do
+        Facter.fact(:osfamily).stubs(:value).returns('Debian')
+        Facter.fact(:java_path).stubs(:value).returns('/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java')
+        context 'with dpkg' do
+          it do
+            dpkg_S_output = <<-EOS
+openjdk-7-jre-headless:amd64: /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+            EOS
+            dpkg_L_output = <<-EOS
+/.
+/usr
+/usr/lib
+/usr/lib/jvm
+/usr/lib/jvm/java-7-openjdk-amd64
+/usr/lib/jvm/java-7-openjdk-amd64/bin
+/usr/lib/jvm/java-7-openjdk-amd64/bin/java-rmi.cgi
+/usr/lib/jvm/java-7-openjdk-amd64/jre
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/keytool
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/pack200
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/unpack200
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/tnameserv
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/servertool
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/orbd
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/rmiregistry
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/rmid
+/usr/lib/jvm/java-7-openjdk-amd64/jre/ASSEMBLY_EXCEPTION
+/usr/lib/jvm/java-7-openjdk-amd64/jre/THIRD_PARTY_README
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jexec
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/charsets.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/javazic.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jvm.hprof.txt
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/classlist
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/management-agent.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/headless
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/headless/libmawt.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libawt.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libmanagement.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libunpack.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libattach.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libverify.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjawt.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjsound.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libj2gss.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libzip.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjava_crw_demo.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libfontmanager.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libsctp.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjava.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libj2krb5.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnpt.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjsdt.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libdt_socket.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/Xusage.txt
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjdwp.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jvm.cfg-default
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjavajpeg.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jli
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libmlib_image.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjavalcms.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjsig.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnio.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libj2pcsc.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libhprof.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libsaproc.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnet.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libicedtea-sound.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjaas_unix.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libinstrument.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libj2pkcs11.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/meta-index
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jce.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/currency.data
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/compilefontconfig.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/cmm
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/cmm/GRAY.pf
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/cmm/sRGB.pf
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/cmm/LINEAR_RGB.pf
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/cmm/CIEXYZ.pf
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/cmm/PYCC.pf
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/resources.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/management
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/US_export_policy.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/local_policy.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/dnsns.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/zipfs.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/localedata.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/icedtea-sound.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/sunpkcs11.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/sunjce_provider.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/motif_CopyNoDrop32x32.gif
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/motif_MoveDrop32x32.gif
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/motif_LinkDrop32x32.gif
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/motif_MoveNoDrop32x32.gif
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/invalid32x32.gif
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/motif_CopyDrop32x32.gif
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/motif_LinkNoDrop32x32.gif
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jar.binfmt
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jsse.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rhino.jar
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/java.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/servertool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/rmiregistry.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/tnameserv.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/orbd.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/pack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/unpack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/keytool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/man1/rmid.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/java.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/servertool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/rmiregistry.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/tnameserv.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/orbd.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/pack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/unpack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/keytool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja_JP.UTF-8/man1/rmid.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1
+/usr/lib/jvm/.java-1.7.0-openjdk-amd64.jinfo
+/usr/share
+/usr/share/lintian
+/usr/share/lintian/overrides
+/usr/share/lintian/overrides/openjdk-7-jre-headless
+/usr/share/doc
+/usr/share/doc/openjdk-7-jre-headless
+/usr/share/doc/openjdk-7-jre-headless/NEWS.IcedTea.gz
+/usr/share/doc/openjdk-7-jre-headless/JAVA_HOME
+/usr/share/doc/openjdk-7-jre-headless/copyright
+/usr/share/doc/openjdk-7-jre-headless/README.IcedTea.gz
+/usr/share/doc/openjdk-7-jre-headless/README.alternatives
+/usr/share/doc/openjdk-7-jre-headless/README.Debian
+/usr/share/doc/openjdk-7-jre-headless/changelog.Debian.gz
+/usr/share/doc/openjdk-7-jre-headless/AUTHORS.IcedTea
+/usr/share/binfmts
+/etc
+/etc/java-7-openjdk
+/etc/java-7-openjdk/logging.properties
+/etc/java-7-openjdk/calendars.properties
+/etc/java-7-openjdk/jvm-amd64.cfg
+/etc/java-7-openjdk/sound.properties
+/etc/java-7-openjdk/content-types.properties
+/etc/java-7-openjdk/psfontj2d.properties
+/etc/java-7-openjdk/management
+/etc/java-7-openjdk/management/snmp.acl
+/etc/java-7-openjdk/management/jmxremote.password
+/etc/java-7-openjdk/management/management.properties
+/etc/java-7-openjdk/management/jmxremote.access
+/etc/java-7-openjdk/security
+/etc/java-7-openjdk/security/java.policy
+/etc/java-7-openjdk/security/nss.cfg
+/etc/java-7-openjdk/security/java.security
+/etc/java-7-openjdk/flavormap.properties
+/etc/java-7-openjdk/net.properties
+/etc/java-7-openjdk/images
+/etc/java-7-openjdk/images/cursors
+/etc/java-7-openjdk/images/cursors/cursors.properties
+/etc/java-7-openjdk/fontconfig.properties
+/etc/java-7-openjdk/psfont.properties.ja
+/etc/java-7-openjdk/accessibility.properties
+/etc/java-7-openjdk/swing.properties
+/etc/java-7-openjdk/tz.properties
+/usr/lib/jvm/java-7-openjdk-amd64/bin/java
+/usr/lib/jvm/java-7-openjdk-amd64/bin/keytool
+/usr/lib/jvm/java-7-openjdk-amd64/bin/pack200
+/usr/lib/jvm/java-7-openjdk-amd64/bin/unpack200
+/usr/lib/jvm/java-7-openjdk-amd64/bin/tnameserv
+/usr/lib/jvm/java-7-openjdk-amd64/bin/servertool
+/usr/lib/jvm/java-7-openjdk-amd64/bin/orbd
+/usr/lib/jvm/java-7-openjdk-amd64/bin/rmiregistry
+/usr/lib/jvm/java-7-openjdk-amd64/bin/rmid
+/usr/lib/jvm/java-7-openjdk-amd64/docs
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/logging.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jvm.cfg
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjsig.so
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/calendars.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/sound.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/content-types.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/psfontj2d.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/management/snmp.acl
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/management/jmxremote.password
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/management/management.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/management/jmxremote.access
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/zi
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/java.policy
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/cacerts
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/nss.cfg
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/java.security
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/flavormap.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/net.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/images/cursors/cursors.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/fontconfig.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/psfont.properties.ja
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/accessibility.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/swing.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/tz.properties
+/usr/lib/jvm/java-7-openjdk-amd64/jre/man/ja
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/java.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/servertool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/rmiregistry.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/tnameserv.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/orbd.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/pack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/unpack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/keytool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/man1/rmid.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/java.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/servertool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/rmiregistry.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/tnameserv.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/orbd.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/pack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/unpack200.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/keytool.1.gz
+/usr/lib/jvm/java-7-openjdk-amd64/man/ja_JP.UTF-8/man1/rmid.1.gz
+/usr/lib/jvm/java-1.7.0-openjdk-amd64
+            EOS
+            Facter::Util::Resolution.expects(:which).with("readlink").returns(true)
+            Facter::Util::Resolution.expects(:which).with("dpkg").returns(true)
+            Facter::Util::Resolution.expects(:exec).with("lsb_release -i -s 2>/dev/null").returns('Debian')
+            Facter::Util::Resolution.expects(:exec).with("readlink -f /usr/bin/java").returns("/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java")
+            Facter::Util::Resolution.expects(:exec).with("dpkg -S /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java").returns(dpkg_S_output)
+            Facter::Util::Resolution.expects(:exec).with("dpkg -L openjdk-7-jre-headless").returns(dpkg_L_output)
+            Facter.value(:java_libjvm).should == "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so"
+          end
+        end
+        context 'without dpkg' do
+          it do
+            Facter::Util::Resolution.stubs(:exec)
+            Facter::Util::Resolution.expects(:which).with("dpkg").returns(false)
+            Facter.value(:java_libjvm).should be_nil
+          end
+        end
+      end
+    end
+  end
+end
