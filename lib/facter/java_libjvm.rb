@@ -15,7 +15,7 @@ Facter.add(:java_libjvm) do
   setcode do
     if Facter::Util::Resolution.which('rpm')
       java_path = Facter.value(:java_path)
-      Facter::Util::Resolution.exec('rpm -qf '+java_path+' -l | grep libjvm.so\$').lines.first.strip
+      Facter::Util::Resolution.exec('rpm -qf '+java_path+' -l').lines.find { |l| l =~ /libjvm.so$/}.strip
     end
   end
 end
