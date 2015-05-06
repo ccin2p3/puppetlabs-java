@@ -26,8 +26,7 @@ Facter.add(:java_libjvm) do
     if Facter::Util::Resolution.which('dpkg')
       java_path = Facter.value(:java_path)
       java_package = Facter::Util::Resolution.exec('dpkg -S '+java_path).split(':').first
-      #Facter::Util::Resolution.exec('dpkg -L '+java_package+' | grep libjvm.so\$').lines.first.strip
-      Facter::Util::Resolution.exec('dpkg -L '+java_package).lines.find_all { |l| l =~ /libjvm.so$/}.first.strip
+      Facter::Util::Resolution.exec('dpkg -L '+java_package).lines.find { |l| l =~ /libjvm.so$/}.strip
     end
   end
 end
