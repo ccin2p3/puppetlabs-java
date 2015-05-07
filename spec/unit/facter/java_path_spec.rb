@@ -12,7 +12,7 @@ describe Facter::Util::Fact do
 /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
         EOS
         Facter::Util::Resolution.expects(:which).with("readlink").returns(true)
-        Facter::Util::Resolution.expects(:exec).with("readlink -f /usr/bin/java").returns(java_path_output)
+        Facter::Util::Resolution.expects(:exec).with("readlink -e /usr/bin/java").returns(java_path_output)
         Facter.value(:java_path).should == "/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java"
       end
     end

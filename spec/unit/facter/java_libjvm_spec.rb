@@ -13,6 +13,15 @@ describe Facter::Util::Fact do
           Facter.fact(:osfamily).stubs(:value).returns('RedHat')
           Facter.fact(:java_path).stubs(:value).returns('/usr/java/jre1.8.0_45/bin/java')
         }
+        context 'without java' do
+          before {
+            Facter.fact(:java_path).stubs(:value).returns(nil)
+          }
+          it do
+            Facter::Util::Resolution.stubs(:exec)
+            Facter.value(:java_libjvm).should be_nil
+          end
+        end
         context 'with rpm' do
           it do
             rpm_output = <<-EOS
@@ -429,6 +438,15 @@ describe Facter::Util::Fact do
           Facter.fact(:osfamily).stubs(:value).returns('Debian')
           Facter.fact(:java_path).stubs(:value).returns('/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java')
         }
+        context 'without java' do
+          before {
+            Facter.fact(:java_path).stubs(:value).returns(nil)
+          }
+          it do
+            Facter::Util::Resolution.stubs(:exec)
+            Facter.value(:java_libjvm).should be_nil
+          end
+        end
         context 'with dpkg' do
           it do
             dpkg_S_output = <<-EOS

@@ -13,8 +13,10 @@
 Facter.add(:java_libjvm) do
   confine :osfamily => "RedHat"
   setcode do
-    if Facter::Util::Resolution.which('rpm')
-      java_path = Facter.value(:java_path)
+    java_path = Facter.value(:java_path)
+    if java_path.empty?
+      nil
+    elsif Facter::Util::Resolution.which('rpm')
       Facter::Util::Resolution.exec("rpm -qf #{java_path} -l").lines.find { |l| l =~ /libjvm.so$/}.strip
     end
   end
@@ -23,8 +25,10 @@ end
 Facter.add(:java_libjvm) do
   confine :osfamily => "Debian"
   setcode do
-    if Facter::Util::Resolution.which('dpkg')
-      java_path = Facter.value(:java_path)
+    java_path = Facter.value(:java_path)
+    if java_path.empty?
+      nil
+    elsif Facter::Util::Resolution.which('dpkg')
       java_package = Facter::Util::Resolution.exec('dpkg -S '+java_path).split(':').first
       Facter::Util::Resolution.exec("dpkg -L #{java_package}").lines.find { |l| l =~ /libjvm.so$/}.strip
     end

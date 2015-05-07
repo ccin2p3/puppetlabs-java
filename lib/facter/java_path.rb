@@ -13,7 +13,7 @@
 Facter.add(:java_path) do
   setcode do
     if Facter::Util::Resolution.which('readlink')
-      Facter::Util::Resolution.exec('readlink -f /usr/bin/java').strip
+      Facter::Util::Resolution.exec('readlink -e /usr/bin/java').strip
     end
   end
 end
