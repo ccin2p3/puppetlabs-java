@@ -6,7 +6,7 @@ describe Facter::Util::Fact do
     Facter.fact(:kernel).stubs(:value).returns('Linux')
   }
 
-  describe "java_libjvm" do
+  describe "java_libjvm_path" do
     context 'returns libjvm path' do
       context 'on osfamily RedHat' do
         before {
@@ -19,7 +19,7 @@ describe Facter::Util::Fact do
           }
           it do
             Facter::Util::Resolution.stubs(:exec)
-            Facter.value(:java_libjvm).should be_nil
+            Facter.value(:java_libjvm_path).should be_nil
           end
         end
         context 'with rpm' do
@@ -422,14 +422,14 @@ describe Facter::Util::Fact do
             EOS
             Facter::Util::Resolution.expects(:which).with("rpm").returns(true)
             Facter::Util::Resolution.expects(:exec).with("rpm -qf /usr/java/jre1.8.0_45/bin/java -l").returns(rpm_output)
-            Facter.value(:java_libjvm).should == "/usr/java/jre1.8.0_45/lib/amd64/server/libjvm.so"
+            Facter.value(:java_libjvm_path).should == "/usr/java/jre1.8.0_45/lib/amd64/server"
           end
         end
         context 'without rpm' do
           it do
             Facter::Util::Resolution.stubs(:exec)
             Facter::Util::Resolution.expects(:which).with("rpm").returns(false)
-            Facter.value(:java_libjvm).should be_nil
+            Facter.value(:java_libjvm_path).should be_nil
           end
         end
       end
@@ -444,7 +444,7 @@ describe Facter::Util::Fact do
           }
           it do
             Facter::Util::Resolution.stubs(:exec)
-            Facter.value(:java_libjvm).should be_nil
+            Facter.value(:java_libjvm_path).should be_nil
           end
         end
         context 'with dpkg' do
@@ -683,14 +683,14 @@ openjdk-7-jre-headless:amd64: /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
             Facter::Util::Resolution.expects(:which).with("dpkg").returns(true)
             Facter::Util::Resolution.expects(:exec).with("dpkg -S /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java").returns(dpkg_S_output)
             Facter::Util::Resolution.expects(:exec).with("dpkg -L openjdk-7-jre-headless").returns(dpkg_L_output)
-            Facter.value(:java_libjvm).should == "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so"
+            Facter.value(:java_libjvm_path).should == "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server"
           end
         end
         context 'without dpkg' do
           it do
             Facter::Util::Resolution.stubs(:exec)
             Facter::Util::Resolution.expects(:which).with("dpkg").returns(false)
-            Facter.value(:java_libjvm).should be_nil
+            Facter.value(:java_libjvm_path).should be_nil
           end
         end
       end
