@@ -3,6 +3,7 @@ require "spec_helper"
 describe Facter::Util::Fact do
   before {
     Facter.clear
+    Facter.fact(:kernel).stubs(:value).returns('Linux')
   }
 
   describe "java_path" do

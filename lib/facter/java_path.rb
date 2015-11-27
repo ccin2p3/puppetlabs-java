@@ -11,6 +11,7 @@
 # Notes:
 #   None
 Facter.add(:java_path) do
+  confine :kernel => 'Linux'
   setcode do
     if Facter::Util::Resolution.which('readlink')
       Facter::Util::Resolution.exec('readlink -e /usr/bin/java').strip
