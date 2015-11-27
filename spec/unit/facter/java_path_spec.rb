@@ -21,7 +21,7 @@ describe Facter::Util::Fact do
     context 'returns nil when readlink not present' do
       it do
         Facter::Util::Resolution.stubs(:exec)
-        Facter::Util::Resolution.expects(:which).with("readlink").returns(false)
+        Facter::Util::Resolution.expects(:which).with("readlink").at_least(1).returns(false)
         Facter.value(:java_path).should be_nil
       end
     end

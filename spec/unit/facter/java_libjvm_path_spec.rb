@@ -428,7 +428,7 @@ describe Facter::Util::Fact do
         context 'without rpm' do
           it do
             Facter::Util::Resolution.stubs(:exec)
-            Facter::Util::Resolution.expects(:which).with("rpm").returns(false)
+            Facter::Util::Resolution.expects(:which).with("rpm").at_least(1).returns(false)
             Facter.value(:java_libjvm_path).should be_nil
           end
         end
@@ -689,7 +689,7 @@ openjdk-7-jre-headless:amd64: /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
         context 'without dpkg' do
           it do
             Facter::Util::Resolution.stubs(:exec)
-            Facter::Util::Resolution.expects(:which).with("dpkg").returns(false)
+            Facter::Util::Resolution.expects(:which).with("dpkg").at_least(1).returns(false)
             Facter.value(:java_libjvm_path).should be_nil
           end
         end
